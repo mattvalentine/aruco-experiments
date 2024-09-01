@@ -90,3 +90,7 @@ pybind11-stubgen pyclipper -o typings
 ```
 
 OpenCV has been messing with the Aruco library structure, so having a newer OpenCV version for this can be helpful, so if you get an error try version 4.10 of OpenCV.
+
+## License
+
+This code is licensed under the MIT License. Feel free to use it in your projects. Happy hacking!
