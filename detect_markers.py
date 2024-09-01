@@ -1,12 +1,13 @@
+#!/usr/bin/env python3
+
+# This script detects ArUco markers in the camera feed.
 import cv2
 
 # initialize camera
-
 cap = cv2.VideoCapture(0)
 
 # setup aruco dictionary and parameters for detection
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
-# aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_100)
 parameters = cv2.aruco.DetectorParameters()
 parameters.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_CONTOUR
 detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)

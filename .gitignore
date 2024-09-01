@@ -1,2 +1,3 @@
 *.svg
 typings
+__pycache__
