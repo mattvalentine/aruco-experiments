@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
 import cv2
-from aruco_svg import generate_svg_path
-from utils import create_svg_path_from_loops, make_square
+from aruco_svg import generate_svg_path, create_svg_path_from_loops, make_square
 
 if __name__ == "__main__":
     aruco_type = cv2.aruco.DICT_4X4_50

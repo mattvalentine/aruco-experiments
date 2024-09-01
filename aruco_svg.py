@@ -1,6 +1,74 @@
 import cv2
 import numpy as np
-from utils import get_loops_from_cut_squares, create_svg_path_from_loops
+from typing import List
+import pyclipper
+
+
+def make_square(point: tuple, width: int = 1) -> List[int]:
+    """Make a square loop of points for the given point and width.
+
+    Args:
+        point (tuple): upper left corner of the square
+        width (int, optional): width must be an integer for pyclipper. Defaults to 1.
+
+    Returns:
+        List[int]: list of points for the square loop
+    """
+    return [
+        point,
+        (point[0] + width, point[1]),
+        (point[0] + width, point[1] + width),
+        (point[0], point[1] + width),
+    ]
+
+
+def get_loops_from_cut_squares(
+    marker_size: int, cut_squares: List[List[int]]
+) -> List[List[int]]:
+    """Subtract cut_squares from a marker square to get points for path geometry.
+
+    Args:
+        marker_size (int): size of the marker square
+        cut_squares (List[List[int]]): list of squares to cut out
+
+    Returns:
+        List[List[int]]: list of loops of points for the path geometry
+    """
+    # Pyclipper can do geometric operations on loops of points
+    clipper = pyclipper.Pyclipper()
+    # Make a square loop for the perimeter of the marker
+    clipper.AddPaths([make_square((0, 0), marker_size)], pyclipper.PT_SUBJECT)
+    # Setup square to cut out
+    clipper.AddPaths([make_square(square) for square in cut_squares], pyclipper.PT_CLIP)
+    # cut out the squares and return
+    return clipper.Execute(pyclipper.CT_DIFFERENCE)
+
+
+def create_svg_path_from_loops(loops: List[List[int]]) -> str:
+    """Create an SVG path string from a list of loops of points.
+
+    Args:
+        loops (List[List[int]]): list of loops of points
+
+    Returns:
+        str: an SVG path string
+    """
+    path_string_list = []
+    for loop in loops:
+        if len(loop) < 1:
+            # skip empty loops
+            continue
+        point = loop.pop(0)  # get the first point
+        # Move to fist point
+        path_string_list.append(f"M {point[0]} {point[1]}")
+        while loop:
+            point = loop.pop(0)  # get the next point
+            # draw a line to the next point
+            path_string_list.append(f"L {point[0]} {point[1]}")
+        # connect back to first point to close the loop
+        path_string_list.append(f"Z")
+    # marker_size + 2 accounts for border around outer edge
+    return f'<path fill="black" stroke="none" d="{" ".join(path_string_list)}" />'
 
 
 def generate_svg_path(marker_id: int, aruco_type: int) -> str:
