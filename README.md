@@ -4,6 +4,17 @@ There are a few SVG generators for Aruco markers, but the vectors they produce t
 
 This repo has some tools for making Aruco markers using OpenCV, PyClipper, and raw strings for the SVG itself. The resulting SVGs are very light weight, and import well into CAD/CAM tools.
 
+Here's an example of a 4x4 Marker with ID 0:
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg"
+  viewBox="-0.5 -0.5 7 7"
+  width="58.333333333333336mm" height="58.333333333333336mm"
+  style="background: white">
+<path fill="black" stroke="none" d="M 6 6 L 0 6 L 0 0 L 6 0 Z M 3 1 L 3 2 L 4 2 L 4 3 L 3 3 L 3 5 L 4 5 L 4 4 L 5 4 L 5 1 Z M 2 2 L 2 3 L 3 3 L 3 2 Z M 1 1 L 1 2 L 2 2 L 2 1 Z" />
+</svg>
+```
+
 ## Usage
 
 Install prereqs with `pip install -r requirements.txt`. (Note this installs OpenCV, so you may want a venv or conda environment to manage versions between projects)
@@ -14,7 +25,7 @@ The valuable part of this repo is in aruco_svg.py, which has 3 functions:
 
 ```python
 import cv2
-from aruco_svg import generate_svg_file, generate_svg_marker, generate_svg_path
+from aruco_svg import generate_svg_path
 
 # To generate an SVG path (without physical units) for a given ArUco marker:
 marker_id = 0
