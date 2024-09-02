@@ -1,3 +1,4 @@
 *.svg
 typings
 __pycache__
+charuco.png
